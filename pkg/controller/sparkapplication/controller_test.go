@@ -1464,6 +1464,7 @@ func TestSyncSparkApplication_ExecutingState(t *testing.T) {
 
 		err = ctrl.syncSparkApplication(fmt.Sprintf("%s/%s", app.Namespace, app.Name))
 		assert.Nil(t, err)
+
 		// Verify application and executor states.
 		updatedApp, err := ctrl.crdClient.SparkoperatorV1beta2().SparkApplications(app.Namespace).Get(context.TODO(), app.Name, metav1.GetOptions{})
 		assert.Equal(t, test.expectedAppState, updatedApp.Status.AppState.State)
