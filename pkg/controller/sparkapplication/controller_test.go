@@ -1464,6 +1464,7 @@ func TestSyncSparkApplication_ExecutingState(t *testing.T) {
 
 		err = ctrl.syncSparkApplication(fmt.Sprintf("%s/%s", app.Namespace, app.Name))
 		assert.Nil(t, err)
+
 		// Verify application and executor states.
 		updatedApp, err := ctrl.crdClient.SparkoperatorV1beta2().SparkApplications(app.Namespace).Get(context.TODO(), app.Name, metav1.GetOptions{})
 		assert.Equal(t, test.expectedAppState, updatedApp.Status.AppState.State)
@@ -1474,7 +1475,7 @@ func TestSyncSparkApplication_ExecutingState(t *testing.T) {
 			if len(test.driverPod.Status.ContainerStatuses) > 0 && test.driverPod.Status.ContainerStatuses[0].State.Terminated != nil {
 				if test.driverPod.Status.ContainerStatuses[0].State.Terminated.ExitCode != 0 {
 					assert.Equal(t, updatedApp.Status.AppState.ErrorMessage,
-						fmt.Sprintf("driver container failed with ExitCode: %d, Reason: %s", test.driverPod.Status.ContainerStatuses[0].State.Terminated.ExitCode, test.driverPod.Status.ContainerStatuses[0].State.Terminated.Reason))
+						fmt.Sprintf("driver container failed with ExitCode: %d, Message: %s", test.driverPod.Status.ContainerStatuses[0].State.Terminated.ExitCode, test.driverPod.Status.ContainerStatuses[0].State.Terminated.Message))
 				}
 			} else {
 				assert.Equal(t, updatedApp.Status.AppState.ErrorMessage, "driver container status missing")

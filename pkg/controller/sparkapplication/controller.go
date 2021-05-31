@@ -340,7 +340,7 @@ func (c *Controller) getAndUpdateDriverState(app *v1beta2.SparkApplication) erro
 			state := getDriverContainerTerminatedState(driverPod.Status)
 			if state != nil {
 				if state.ExitCode != 0 {
-					app.Status.AppState.ErrorMessage = fmt.Sprintf("driver container failed with ExitCode: %d, Reason: %s", state.ExitCode, state.Reason)
+					app.Status.AppState.ErrorMessage = fmt.Sprintf("driver container failed with ExitCode: %d, Message: %s", state.ExitCode, state.Message)
 				}
 			} else {
 				app.Status.AppState.ErrorMessage = "driver container status missing"
